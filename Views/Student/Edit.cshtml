@@ -1,0 +1,146 @@
+﻿@model Student
+@{
+    ViewData["Title"] = "Edit Student";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Edit Student</h3>
+                </div>
+
+                <div class="card-body">
+                    <form asp-action="Edit" enctype="multipart/form-data" method="post" class="needs-validation" novalidate>
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="row g-3">
+                            <!-- First Name -->
+                            <div class="col-md-6">
+                                <label asp-for="FirstName" class="form-label"></label>
+                                <input asp-for="FirstName" class="form-control" required />
+                                <div class="invalid-feedback">Please provide a first name.</div>
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="col-md-6">
+                                <label asp-for="LastName" class="form-label"></label>
+                                <input asp-for="LastName" class="form-control" required />
+                                <div class="invalid-feedback">Please provide a last name.</div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-12">
+                                <label asp-for="Email" class="form-label"></label>
+                                <input asp-for="Email" type="email" class="form-control" required />
+                                <div class="invalid-feedback">Please enter a valid email.</div>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="col-12">
+                                <label asp-for="PhoneNumber" class="form-label"></label>
+                                <input asp-for="PhoneNumber" class="form-control" />
+                            </div>
+
+                            <!-- Status -->
+                            <div class="col-md-6">
+                                <label asp-for="EnrolmentStatus" class="form-label"></label>
+                                <select asp-for="EnrolmentStatus" class="form-select" required>
+                                    <option value="">Select status...</option>
+                                    <option>Pending</option>
+                                    <option>Enrolled</option>
+                                    <option>Suspended</option>
+                                </select>
+                                <div class="invalid-feedback">Please select a status.</div>
+                            </div>
+
+                            <!-- Current Image -->
+                            <div class="col-md-6">
+                                <label class="form-label">Current Profile Image</label>
+                                <div class="d-flex align-items-center">
+                                    @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+                                    {
+                                        <img src="@Url.Action("GetStudentImage", new { id = Model.Id })"
+                                             width="80"
+                                             class="rounded-circle me-3 border"
+                                             alt="Current profile image" />
+                                    }
+                                    else
+                                    {
+                                        <div class="avatar-placeholder rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center me-3"
+                                             style="width:80px;height:80px">
+                                            <i class="bi bi-person" style="font-size: 2rem"></i>
+                                        </div>
+                                    }
+                                    <span class="text-muted">@(Model.ProfileImageUrl != null ? "" : "No image")</span>
+                                </div>
+                            </div>
+
+                            <!-- New Image -->
+                            <div class="col-12">
+                                <label class="form-label">Update Profile Image</label>
+                                <input type="file" name="profileImage" class="form-control" />
+                                <div class="form-text">JPG, PNG or GIF (Max 2MB)</div>
+                            </div>
+
+                            <!-- Form Actions -->
+                            <div class="col-12 mt-4">
+                                <div class="d-flex justify-content-between">
+                                    <a asp-action="Index" class="btn btn-outline-secondary">
+                                        <i class="bi bi-arrow-left"></i> Back to List
+                                    </a>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-save"></i> Save Changes
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Form validation
+        (function () {
+            'use strict'
+
+            const forms = document.querySelectorAll('.needs-validation')
+
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+
+    <style>
+        .avatar-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-control, .form-select {
+            padding: 0.5rem 1rem;
+        }
+
+        .card {
+            border-radius: 0.5rem;
+        }
+
+        .card-header {
+            border-radius: 0.5rem 0.5rem 0 0 !important;
+        }
+    </style>
+}

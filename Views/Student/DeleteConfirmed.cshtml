@@ -1,0 +1,66 @@
+﻿@model Student
+@{
+    ViewData["Title"] = "Delete Restricted";
+}
+
+<div class="container mt-5">
+    <div class="card border-warning">
+        <div class="card-header bg-warning text-dark">
+            <h3><i class="bi bi-shield-lock"></i> Delete Restricted</h3>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-heading"><i class="bi bi-exclamation-octagon-fill"></i> Action Not Permitted</h4>
+                <hr>
+                <p>You don't have permission to delete this student record through the application.</p>
+            </div>
+
+            <div class="mt-4">
+                <h5>Student Details:</h5>
+                <dl class="row">
+                    <dt class="col-sm-3">ID</dt>
+                    <dd class="col-sm-9"><code>@Model.Id</code></dd>
+
+                    <dt class="col-sm-3">Name</dt>
+                    <dd class="col-sm-9">@Model.FirstName @Model.LastName</dd>
+
+                    <dt class="col-sm-3">Email</dt>
+                    <dd class="col-sm-9">@Model.Email</dd>
+                </dl>
+            </div>
+
+            <div class="mt-4 p-3 bg-light rounded">
+                <h5><i class="bi bi-azure"></i> Manual Deletion Instructions:</h5>
+                <ol>
+                    <li>Log in to the <a href="https://portal.azure.com" target="_blank">Azure Portal</a></li>
+                    <li>Navigate to your Cosmos DB account</li>
+                    <li>Open Data Explorer</li>
+                    <li>Find the student record in your container</li>
+                    <li>Right-click the item and select "Delete Item"</li>
+                </ol>
+                <div class="alert alert-info mt-3">
+                    <i class="bi bi-info-circle"></i> <strong>Note:</strong> You'll need <code>Cosmos DB Contributor</code> or higher permissions.
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a asp-action="Index" class="btn btn-primary">
+                <i class="bi bi-arrow-left"></i> Back to Student List
+            </a>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+        <style>
+            code {
+                background-color: #f8f9fa;
+                padding: 2px 4px;
+                border-radius: 3px;
+                font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+            }
+            ol {
+                padding-left: 1.5rem;
+            }
+        </style>
+}

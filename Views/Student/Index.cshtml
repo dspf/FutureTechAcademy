@@ -1,0 +1,241 @@
+﻿@model List<Student>
+@{
+    ViewData["Title"] = "Student Management";
+}
+
+<!-- Notification Partial -->
+<partial name="_Notification" />
+
+<div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+        <div class="d-flex justify-content-between align-items-center">
+            <h3 class="mb-0"><i class="bi bi-people-fill me-2"></i>Student List</h3>
+            <div>
+                <a asp-action="AddStudent" class="btn btn-light">
+                    <i class="bi bi-plus-circle"></i> Add New Student
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body">
+        <!-- Search Box -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search students...">
+                    <button class="btn btn-outline-secondary" type="button" id="searchButton">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-primary active">All</button>
+                    <button type="button" class="btn btn-outline-primary">Active</button>
+                    <button type="button" class="btn btn-outline-primary">Inactive</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Table -->
+        <div class="table-responsive">
+            <table class="table table-hover table-striped" id="studentTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th style="width: 120px">Profile</th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Status</th>
+                        <th style="width: 150px">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var s in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="avatar avatar-md">
+                                    @if (!string.IsNullOrEmpty(s.ProfileImageUrl))
+                                    {
+                                        <img src="@Url.Action("GetStudentImage", new { id = s.Id })"
+                                             class="rounded-circle img-thumbnail"
+                                             alt="@s.FirstName's profile"
+                                             style="width:60px;height:60px;object-fit:cover">
+                                    }
+                                    else
+                                    {
+                                        <div class="avatar-placeholder rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
+                                             style="width:60px;height:60px">
+                                            <i class="bi bi-person" style="font-size: 1.5rem"></i>
+                                        </div>
+                                    }
+                                </div>
+                            </td>
+                            <td class="align-middle"><code>@s.Id</code></td>
+                            <td class="align-middle fw-semibold">@s.FirstName @s.LastName</td>
+                            <td class="align-middle"><a href="mailto:@s.Email">@s.Email</a></td>
+                            <td class="align-middle">@s.PhoneNumber</td>
+                            <td class="align-middle">
+                                <span class="badge @(s.EnrolmentStatus == "Enrolled" ? "bg-success" : s.EnrolmentStatus == "Pending" ? "bg-warning" : "bg-danger")">
+                                    @s.EnrolmentStatus
+                                </span>
+                            </td>
+                            <td class="align-middle">
+                                <div class="btn-group btn-group-sm" role="group">
+                                    <a asp-action="Edit" asp-route-id="@s.Id"
+                                       class="btn btn-outline-primary"
+                                       title="Edit"
+                                       data-bs-toggle="tooltip">
+                                        <i class="bi bi-pencil-square"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@s.Id"
+                                       class="btn btn-outline-danger delete-btn"
+                                       title="Delete"
+                                       data-bs-toggle="tooltip"
+                                       data-name="@s.FirstName @s.LastName">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <a asp-action="Index" asp-route-id="@s.Id"
+                                       class="btn btn-outline-info"
+                                       title="View Details"
+                                       data-bs-toggle="tooltip">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="card-footer d-flex justify-content-between align-items-center">
+        <div class="text-muted">
+            Showing 1 to @Model.Count of @Model.Count entries
+        </div>
+        <nav>
+            <ul class="pagination mb-0">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Initialize tooltips
+        $(function () {
+            $('[data-bs-toggle="tooltip"]').tooltip();
+
+            // SweetAlert confirmation
+            $('.delete-btn').click(function(e) {
+                e.preventDefault();
+                const studentName = $(this).data('name');
+
+                Swal.fire({
+                    title: 'Delete Restricted',
+                    html: `
+                        <div class="text-start">
+                            <p>You don't have permission to delete students through this application.</p>
+                            <p>To delete <b>${studentName}</b>, follow these steps:</p>
+                            <ol class="text-start">
+                                <li>Log in to the <a href="https://portal.azure.com" target="_blank">Azure Portal</a></li>
+                                <li>Navigate to your Cosmos DB account</li>
+                                <li>Open Data Explorer</li>
+                                <li>Find the student record in your container</li>
+                                <li>Right-click the item and select "Delete Item"</li>
+                            </ol>
+                            <div class="alert alert-warning mt-3">
+                                <i class="bi bi-info-circle"></i> Requires <code>Cosmos DB Contributor</code> permissions
+                            </div>
+                        </div>
+                    `,
+                    icon: 'info',
+                    showConfirmButton: false,
+                    showCancelButton: true,
+                    cancelButtonColor: '#3085d6',
+                    cancelButtonText: 'I Understand',
+                    focusCancel: true,
+                    width: '800px'
+                });
+            });
+        });
+    </script>
+
+    <style>
+        .swal2-popup {
+            text-align: left !important;
+        }
+
+        .swal2-content ol {
+            padding-left: 1.5em;
+        }
+
+        .swal2-content .alert {
+            padding: 0.75rem;
+            margin-top: 1rem;
+        }
+    </style>
+    <script>
+        // Search functionality
+        $(document).ready(function() {
+            // Initialize tooltips
+            $('[data-bs-toggle="tooltip"]').tooltip();
+
+            // Search function
+            $('#searchButton').click(function() {
+                filterTable();
+            });
+
+            $('#searchInput').keyup(function() {
+                filterTable();
+            });
+
+            function filterTable() {
+                const value = $('#searchInput').val().toLowerCase();
+                $('#studentTable tbody tr').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            }
+
+            // Status filter buttons
+            $('.btn-group .btn').click(function() {
+                $(this).addClass('active').siblings().removeClass('active');
+                // Add your filter logic here
+            });
+        });
+    </script>
+
+    <style>
+        .avatar-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(13, 110, 253, 0.05);
+        }
+
+        .badge {
+            font-size: 0.85em;
+            padding: 0.35em 0.65em;
+        }
+    </style>
+}

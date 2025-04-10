@@ -1,0 +1,149 @@
+﻿@model Student
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addStudentModal">
+    <i class="bi bi-plus-circle"></i> Add New Student
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="addStudentModalLabel">
+                    <i class="bi bi-person-plus"></i> Add New Student
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="addStudentForm" asp-action="AddStudent" enctype="multipart/form-data" method="post" class="needs-validation" novalidate>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <!-- First Name -->
+                        <div class="col-md-6">
+                            <label asp-for="FirstName" class="form-label"></label>
+                            <input asp-for="FirstName" class="form-control" required />
+                            <div class="invalid-feedback">Please provide a first name.</div>
+                        </div>
+
+                        <!-- Last Name -->
+                        <div class="col-md-6">
+                            <label asp-for="LastName" class="form-label"></label>
+                            <input asp-for="LastName" class="form-control" required />
+                            <div class="invalid-feedback">Please provide a last name.</div>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-12">
+                            <label asp-for="Email" class="form-label"></label>
+                            <div class="input-group has-validation">
+                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                <input asp-for="Email" type="email" class="form-control" required />
+                                <div class="invalid-feedback">Please enter a valid email.</div>
+                            </div>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="col-12">
+                            <label asp-for="PhoneNumber" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                <input asp-for="PhoneNumber" class="form-control" />
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="col-md-6">
+                            <label asp-for="EnrolmentStatus" class="form-label"></label>
+                            <select asp-for="EnrolmentStatus" class="form-select" required>
+                                <option value="" selected disabled>Select status...</option>
+                                <option>Pending</option>
+                                <option>Enrolled</option>
+                                <option>Suspended</option>
+                            </select>
+                            <div class="invalid-feedback">Please select a status.</div>
+                        </div>
+
+                        <!-- Profile Image -->
+                        <div class="col-md-6">
+                            <label class="form-label">Profile Image</label>
+                            <input type="file" name="profileImage" class="form-control" accept="image/*" />
+                            <div class="form-text">Max 2MB (JPG, PNG)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Save Student
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Form validation
+        (function () {
+            'use strict'
+
+            const form = document.getElementById('addStudentForm')
+
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+
+            // Email availability check
+            $('#Email').blur(function() {
+                const email = $(this).val();
+                if (email) {
+                    $.get(`/Student/CheckEmail?email=${email}`, function(exists) {
+                        if (exists) {
+                            $('#Email').addClass('is-invalid');
+                            $('[data-valmsg-for="Email"]').text('Email already registered');
+                        }
+                    });
+                }
+            });
+
+            // Reset validation when modal closes
+            $('#addStudentModal').on('hidden.bs.modal', function () {
+                form.classList.remove('was-validated');
+                $('#Email').removeClass('is-invalid');
+            });
+        })()
+    </script>
+
+    <style>
+        .modal-header {
+            border-radius: 0;
+        }
+
+        .form-control, .form-select {
+            padding: 0.5rem 1rem;
+        }
+
+        .input-group-text {
+            background-color: #f8f9fa;
+        }
+
+        .was-validated .form-control:invalid,
+        .was-validated .form-select:invalid {
+            border-color: #dc3545;
+        }
+
+        .was-validated .form-control:valid,
+        .was-validated .form-select:valid {
+            border-color: #198754;
+        }
+    </style>
+}

@@ -1,0 +1,129 @@
+﻿@{
+    ViewData["Title"] = "Home";
+}
+
+<style>
+    body {
+        background-color: #f3ede4; /* Warm light brown */
+        color: #333; /* Darker text for better contrast */
+    }
+
+    .card {
+        background-color: rgba(255, 255, 255, 0.9);
+        transition: transform 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+    .carousel {
+        border: 1px solid #ddd;
+    }
+</style>
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+<!-- Hero Section -->
+<div class="container py-5">
+    <div class="row align-items-center">
+        <div class="col-md-6 text-center text-md-start">
+            <h1 class="display-4 fw-bold text-primary">Welcome to FutureTechAcademy</h1>
+            <p class="lead text-muted">Unlock your tech future. Learn ASP.NET Core, build real apps, and join a developer community that thrives.</p>
+            <a class="btn btn-primary btn-lg me-2" asp-controller="Account" asp-action="Login">
+                <i class="bi bi-box-arrow-in-right me-1"></i> Get Started
+            </a>
+            <a class="btn btn-outline-secondary btn-lg" href="https://learn.microsoft.com/aspnet/core" target="_blank">
+                <i class="bi bi-journal-code me-1"></i> Learn ASP.NET
+            </a>
+        </div>
+        <div class="col-md-6 text-center mt-4 mt-md-0">
+            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055687.png" class="img-fluid" alt="Learning illustration" />
+        </div>
+    </div>
+</div>
+
+<!-- Slideshow / Carousel -->
+<div id="featureCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="~/css/alexandre-debieve-FO7JIlwjOtU-unsplash.jpg" class="d-block w-100 rounded" alt="Slide 1">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
+                <h5>Learn by Doing</h5>
+                <p>Practice with real-world projects using ASP.NET Core MVC and C#.</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="~/css/li-zhang-zWWhupBREII-unsplash.jpg" class="d-block w-100 rounded" alt="Slide 2">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
+                <h5>Join Our Dev Community</h5>
+                <p>Collaborate with students and pros across the country.</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="~/css/thisisengineering-ZPeXrWxOjRQ-unsplash.jpg" class="d-block w-100 rounded" alt="Slide 3">
+            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
+                <h5>Future-Ready Skills</h5>
+                <p>Stay ahead with training on the latest tech and tools.</p>
+            </div>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#featureCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#featureCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+<!-- Features Section -->
+<div class="container text-center my-5">
+    <h2 class="fw-bold mb-4">Why Choose FutureTechAcademy?</h2>
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="bi bi-laptop-code fs-1 text-primary"></i>
+                    <h5 class="card-title mt-3">Project-Based Learning</h5>
+                    <p class="card-text">Build real apps like booking systems, chatbots, and dashboards as you learn.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="bi bi-people-fill fs-1 text-success"></i>
+                    <h5 class="card-title mt-3">Community & Mentors</h5>
+                    <p class="card-text">You're not alone. Get help, feedback, and tips from a real dev community.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body">
+                    <i class="bi bi-award fs-1 text-warning"></i>
+                    <h5 class="card-title mt-3">Career Ready</h5>
+                    <p class="card-text">Build your portfolio and gain skills to land internships and remote work.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="bg-primary text-white text-center py-5">
+    <div class="container">
+        <h3 class="fw-bold">Start Your Coding Journey Today</h3>
+        <p class="mb-4">Sign up and learn how to build powerful, modern web apps!</p>
+        <a class="btn btn-light btn-lg" asp-controller="Account" asp-action="Login">
+            <i class="bi bi-rocket-takeoff me-1"></i> Get Started Now
+        </a>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <small>&copy; @DateTime.Now.Year FutureTechAcademy. All rights reserved.</small>
+</footer>
